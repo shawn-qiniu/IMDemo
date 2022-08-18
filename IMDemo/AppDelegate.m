@@ -62,7 +62,7 @@
 
     QNSDKConfig *config = [[QNSDKConfig alloc]initConfigWithDataDir:dataDir cacheDir:cacheDir pushCertName:@"" userAgent:phone];
     config.appID = APPID;
-//    config.logLevelType = QNIMLogLevelDebug;
+    config.logLevelType = QNIMLogLevelDebug;
 //    [config setValue:@(QNIMLogLevelDebug) forKey:@"_logLevelType"];
     [[QNIMClient sharedClient] registerWithSDKConfig:config];
     

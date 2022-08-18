@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy) NSString *vsn;
 
-@property (nonatomic, copy, readonly) NSString *sdkVersion;
+@property (nonatomic, copy) NSString *sdkVersion;
 
 @property (nonatomic, copy) NSString *pushCertName;
 
@@ -28,11 +28,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic,assign) BOOL enableDeliveryAck;
 
-@property (nonatomic, assign, readonly) QNIMLogLevel logLevelType;
+/**
+ * 获取和设置是否在消息config字段里携带username功能（方便在未获取到对方user info时展示其用户名），默认是关闭的。
+ **/
+@property (nonatomic,assign) BOOL carryUsernameInMessage;
+
+@property (nonatomic, assign) QNIMLogLevel logLevelType;
 
 @property (nonatomic, assign) BOOL consoleOutput;
 
-@property (nonatomic, strong) QNIMHostConfig *hostConfig;
+//@property (nonatomic, strong) QNIMHostConfig *hostConfig;
 
 @property (nonatomic,assign) BOOL loadAllServerConversations;
 /**

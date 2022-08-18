@@ -15,7 +15,7 @@
 @property (weak, nonatomic) IBOutlet UITextView *logView;
 @property (weak, nonatomic) IBOutlet UITextField *conversationId;
 @property (weak, nonatomic) IBOutlet UISwitch *groupSwitch;
-
+//@property (assign,nonatomic)  long long groupId;
 
 @end
 
@@ -27,6 +27,7 @@
     // Do any additional setup after loading the view.
     self.userName.text = @"shawn";
     self.password.text = @"123";
+    
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
@@ -39,8 +40,7 @@
     NSString *name = self.userName.text;
     NSString *pwd = self.password.text;
     [[QNIMClient sharedClient] signInByName:name password:pwd completion:^(QNIMError * _Nonnull error) {
-        NSLog(@"%@",error);
-        if(error) {
+        if(error.errorCode != 0) {
             [self addLog:[NSString stringWithFormat:@"登录失败:%@",error.errorMessage]];
         }else{
             [self addLog:@"登录成功"];
@@ -53,8 +53,6 @@
     NSString *name = self.userName.text;
     NSString *pwd = self.password.text;
     [[QNIMClient sharedClient] signUpNewUser:name password:pwd completion:^(QNIMUserProfile * _Nonnull profile, QNIMError * _Nonnull error) {
-        NSLog(@"%@---%@",profile,error.errorMessage);
-        
         if(error){
             [self addLog:[NSString stringWithFormat:@"注册失败 %@",error.errorMessage]];
         }else{
@@ -88,7 +86,8 @@
         if(error){
             [self addLog:[NSString stringWithFormat:@"creatGroupWithCreateGroupOption error %@",error.errorMessage]];
         }else{
-            [self addLog:[NSString stringWithFormat:@"creatGroupWithCreateGroupOption success"]];
+            self.conversationId.text = [NSString stringWithFormat:@"%lld",group.groupId];
+            [self addLog:[NSString stringWithFormat:@"成功创建群 id:%lld",group.groupId]];
         }
     }];
 }
@@ -96,9 +95,10 @@
 - (IBAction)joinGroup:(id)sender {
     [[QNIMGroupService sharedOption] joinGroupWithGroupId:self.conversationId.text message:@"test" completion:^(QNIMError * _Nonnull error) {
         if(error){
-            [self addLog:[NSString stringWithFormat:@"joinGroupWithGroupId error %@",error.errorMessage]];
+            [self addLog:[NSString stringWithFormat:@"加入群聊失败  %@",error.errorMessage]];
         }else{
-            [self addLog:[NSString stringWithFormat:@"joinGroupWithGroupId success"]];
+            [self addLog:[NSString stringWithFormat:@"成功加入群聊 %@",self.conversationId.text]];
+
         }
     }];
 }
@@ -106,6 +106,7 @@
 #pragma mark private methods
  
 - (void)addLog:(NSString *)log {
+    NSLog(@"%@",log);
     self.logView.text = [NSString stringWithFormat:@"%@ \n %@",self.logView.text,log];
 }
 @end
